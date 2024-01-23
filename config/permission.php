@@ -184,34 +184,28 @@ return [
         'store' => 'default',
     ],
 
-    'permissions' =>
-        [
-        'categories' =>
-            [
+    'permissions' => [
+        'categories' => [
             'publish' => 'publish categories',
             'edit' => 'edit categories',
             'delete' => 'delete categories',
-            ],
-        'products' =>
-            [
+        ],
+        'products' => [
             'publish' => 'publish products',
             'edit' => 'edit products',
             'delete' => 'delete products',
-            ],
-        'orders' =>
-            [
+        ],
+        'orders' => [
             'edit' => 'edit orders',
             'delete' => 'delete orders',
-            ],
-        'users' =>
-            [
+        ],
+        'users' => [
             'edit' => 'edit users',
             'delete' => 'delete users',
-            ],
-        'account' =>
-            [
+        ],
+        'account' => [
             'edit' => 'edit account',
             'delete' => 'delete account',
-            ]
-    ]
+        ],
+    ],
 ];

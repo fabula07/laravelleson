@@ -18,23 +18,18 @@ class PermissionAndRolesSeeder extends Seeder
 
         $permissions = config('permission.permissions');
 
-        foreach ($permissions as $resource)
-        {
-            foreach ($resource as $permission)
-            {
+        foreach ($permissions as $resource) {
+            foreach ($resource as $permission) {
                 Permission::findOrCreate($permission);
             }
         }
 
-        if (!Role::where('name', Roles::CUSTOMER->value)->exists())
-        {
+        if (! Role::where('name', Roles::CUSTOMER->value)->exists()) {
             (Role::create(['name' => Roles::CUSTOMER->value]))->givePermissionTo(array_values($permissions['account']));
         }
 
-        if (!Role::where('name', Roles::MODERATOR->value)->exists())
-        {
-            $moderatorPermissions = array_merge
-            (
+        if (! Role::where('name', Roles::MODERATOR->value)->exists()) {
+            $moderatorPermissions = array_merge(
                 array_values($permissions['categories']),
                 array_values($permissions['products'])
             );
@@ -42,8 +37,7 @@ class PermissionAndRolesSeeder extends Seeder
             (Role::create(['name' => Roles::MODERATOR->value]))->givePermissionTo($moderatorPermissions);
         }
 
-        if (!Role::where('name', Roles::ADMIN->value)->exists())
-        {
+        if (! Role::where('name', Roles::ADMIN->value)->exists()) {
             (Role::create(['name' => Roles::ADMIN->value]))->givePermissionTo(Permission::all());
         }
     }

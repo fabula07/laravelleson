@@ -27,14 +27,14 @@ class UserFactory extends Factory
     {
         return
             [
-            'name' => fake()->name(),
-            'surname' => fake()->lastName(),
-            'email' => fake()->unique()->safeEmail(),
-            'email_verified_at' => now(),
-            'phone' => fake()->e164PhoneNumber(),
-            'birthdate' => fake()->dateTimeBetween('-70 years', '-18 years')->format('Y-m-d'),
-            'password' => static::$password ??= Hash::make('test1234'),
-            'remember_token' => Str::random(10),
+                'name' => fake()->name(),
+                'surname' => fake()->lastName(),
+                'email' => fake()->unique()->safeEmail(),
+                'email_verified_at' => now(),
+                'phone' => fake()->e164PhoneNumber(),
+                'birthdate' => fake()->dateTimeBetween('-70 years', '-18 years')->format('Y-m-d'),
+                'password' => static::$password ??= Hash::make('test1234'),
+                'remember_token' => Str::random(10),
             ];
     }
 
@@ -50,14 +50,13 @@ class UserFactory extends Factory
 
     public function configure()
     {
-        return $this->afterCreating(function (User $user)
-        {
-               $user-> assignRole(Roles::CUSTOMER->value);
+        return $this->afterCreating(function (User $user) {
+            $user->assignRole(Roles::CUSTOMER->value);
         });
     }
 
     public function withEmail(string $email)
-   {
-       return $this->state(fn(array $attrs) => ['email' => $email]);
-   }
+    {
+        return $this->state(fn (array $attrs) => ['email' => $email]);
+    }
 }
