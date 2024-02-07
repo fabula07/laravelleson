@@ -7,6 +7,7 @@ use App\Http\Requests\Products\CreateProductRequest;
 use App\Http\Requests\Products\EditProductRequest;
 use App\Models\Category;
 use App\Models\Product;
+use App\Repositories\Contracts\ProductsRepositoryContract;
 use Illuminate\Http\Request;
 
 class ProductsController extends Controller
@@ -16,7 +17,7 @@ class ProductsController extends Controller
      */
     public function index()
     {
-        $products = Product::with('categories')->sortable()->paginate(10);
+        $products = Product::with('categories')->sortable()->paginate(5);
         return view('admin/products/index', compact('products'));
     }
 
@@ -32,9 +33,9 @@ class ProductsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(CreateProductRequest $request)
+    public function store(CreateProductRequest $request, ProductsRepositoryContract $repository)
     {
-        dd($request->validated());
+        return $repository->create($request) ? redirect()->route('admin.products.index') : redirect()->back()->withInput();
     }
 
     /**
@@ -50,15 +51,18 @@ class ProductsController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        $categories = Category::all();
+        $productCategories = $product->categories()->get()->pluck('id')->toArray();
+
+        return view('admin/products/edit', compact('product', 'categories', 'productCategories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(EditProductRequest $request, Product $product)
+    public function update(EditProductRequest $request, Product $product, ProductsRepositoryContract $repository)
     {
-        //
+        return $repository->update($product, $request) ? redirect()->route('admin.products.edit', $product) : redirect()->back()->withInput();
     }
 
     /**
@@ -66,6 +70,9 @@ class ProductsController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+        $product->categories()->detach();
+        $product->delete();
+
+        return redirect()->route('admin.products.index');
     }
 }
