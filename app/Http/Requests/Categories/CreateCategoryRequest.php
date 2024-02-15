@@ -12,7 +12,12 @@ class CreateCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return auth()->user()->can(config('permission.permissions.categories.publish'));
+    }
+
+    public function messages()
+    {
+        return ['name.min' => 'Should be more than 1 symbol'];
     }
 
     /**
