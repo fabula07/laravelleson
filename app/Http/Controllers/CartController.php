@@ -10,12 +10,13 @@ class CartController extends Controller
 {
     public function index()
     {
-        $cartContent = Cart::instance('cart')->content();
+        $content = Cart::instance('cart')->content();
+        $subTotal = Cart::instance('cart')->subtotal();
 
-        $orderPrice = Cart::instance('cart')->total();
+        $tax = Cart::instance('cart')->tax();
+        $total = Cart::instance('cart')->total();
 
-
-        return view('cart/index', compact('cartContent', 'orderPrice'));
+        return view('cart/index', compact('content', 'subTotal', 'total', 'tax'));
 
     }
 
