@@ -42,10 +42,10 @@ class OrderStatus extends Model
         return $this->statusQuery($query, Status::Completed);
     }
 
-    public function name(): Attribute
-    {
-        return Attribute::get(fn() => $this->name->value);
-    }
+  #  public function name(): Attribute
+  #  {
+  #      return Attribute::get(fn() => $this->name->value);
+  #  }
 
     protected function statusQuery(Builder $query, Status $status): Builder
     {

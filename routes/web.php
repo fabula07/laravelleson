@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Order;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,9 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('event', function()
+{
+    $order = Order::all()->last();
+    \App\Events\OrderCreated::dispatch($order);
+});
+
 Route::get('/', \App\Http\Controllers\HomeController::class)->name('home');
-
-
 
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
@@ -57,4 +62,5 @@ Route::middleware(['auth'])->group(function()
 {
     Route::get('checkout', \App\Http\Controllers\CheckoutController::class)->name('checkout');
     Route::get('orders/{order}/paypal/thank-you', \App\Http\Controllers\Orders\PaypalController::class);
+    Route::get('invoices/{order}', \App\Http\Controllers\InvoiceController::class)->name('invoice');
 });
