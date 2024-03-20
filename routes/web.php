@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,11 +14,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('event', function()
+Route::get('test', function()
 {
-    $order = Order::all()->last();
-    \App\Events\OrderCreated::dispatch($order);
+    \App\Events\UserNotify::dispatch('test message');
 });
 
 Route::get('/', \App\Http\Controllers\HomeController::class)->name('home');
@@ -63,4 +62,12 @@ Route::middleware(['auth'])->group(function()
     Route::get('checkout', \App\Http\Controllers\CheckoutController::class)->name('checkout');
     Route::get('orders/{order}/paypal/thank-you', \App\Http\Controllers\Orders\PaypalController::class);
     Route::get('invoices/{order}', \App\Http\Controllers\InvoiceController::class)->name('invoice');
+    Route::post('wishlist/{product}', [\App\Http\Controllers\WishListController::class, 'add'])->name('wishlist.add');
+    Route::delete('wishlist/{product}', [\App\Http\Controllers\WishListController::class, 'remove'])->name('wishlist.remove');
+    Route::get('account/wishlist', \App\Http\Controllers\Account\WishlistController::class)->name('account.wishlist');
+});
+
+Route::name('callbacks.')->prefix('callback')->group(function()
+{
+    Route::get('telegram', \App\Http\Controllers\Callbacks\JoinTelegramCallback::class)->middleware(['role:admin'])->name('telegram');
 });
